@@ -2,17 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
   <title>Rift Warden</title>
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 
-<!-- ============================================================
-     SCREEN: LOGIN
-     ============================================================ -->
+<!-- LOGIN -->
 <div id="screen-login" class="screen active">
-  <div class="login-bg"></div>
   <div class="login-card">
     <div class="rw-logo">
       <div class="logo-symbol">⬡</div>
@@ -21,13 +18,11 @@
     </div>
     <input id="login-name" type="text" placeholder="Enter your Warden callsign…" maxlength="18" autocomplete="off"/>
     <button id="login-btn" class="btn btn-primary">Establish Rift Link</button>
-    <p class="login-note">Your callsign is your save. Use the same one to continue. Your monsters keep fighting while you're away.</p>
+    <p class="login-note">Your callsign is your save. Use the same one to continue.</p>
   </div>
 </div>
 
-<!-- ============================================================
-     SCREEN: HUB
-     ============================================================ -->
+<!-- HUB -->
 <div id="screen-hub" class="screen">
   <header class="hub-header">
     <div class="hub-title">
@@ -35,120 +30,111 @@
       <span id="hub-username">—</span>
     </div>
     <div class="hub-currencies">
-      <div class="currency" title="Gold"><span class="cur-icon">◈</span><span id="hud-gold">0</span></div>
+      <div class="currency" title="Gold"><span class="cur-icon gold-icon">◈</span><span id="hud-gold">0</span></div>
       <div class="currency" title="Orbs"><span class="cur-icon orb-icon">◉</span><span id="hud-orbs">0</span></div>
       <div class="currency" title="Essence"><span class="cur-icon ess-icon">✦</span><span id="hud-essence">0</span></div>
-      <div class="currency" title="Crystals"><span class="cur-icon cry-icon">◆</span><span id="hud-crystals">0</span></div>
+    </div>
+    <div class="hub-sound-controls">
+      <button id="music-btn" class="sound-btn active" onclick="toggleMusicUI()" title="Toggle Music">♪</button>
+      <button id="sfx-btn"   class="sound-btn active" onclick="toggleSFXUI()"   title="Toggle SFX">🔊</button>
     </div>
   </header>
   <div class="hub-body">
     <div class="hub-warden-rank">
-      <div class="rank-info">
-        <span>Warden Rank <b id="hub-rank-num">1</b></span>
-        <span id="hub-rank-xp">0 / 200 XP</span>
-      </div>
-      <div class="rank-bar"><div id="hub-rank-fill" class="rank-bar-fill"></div></div>
+      <div class="rank-info"><span>Warden Rank <b id="hub-rank-num">1</b></span><span id="hub-rank-xp">0 / 200 XP</span></div>
+      <div class="rank-bar"><div id="hub-rank-fill"></div></div>
     </div>
     <div class="hub-cards">
-      <div class="hub-card" id="card-portal" onclick="openPortal()">
-        <div class="hub-card-icon">◉</div>
+      <div class="hub-card" onclick="openPortal()">
+        <div class="hub-card-icon" style="color:var(--orb-color)">◉</div>
         <div class="hub-card-label">Rift Portal</div>
         <div class="hub-card-sub">Summon monsters</div>
       </div>
-      <div class="hub-card" id="card-roster" onclick="showScreen('screen-roster')">
-        <div class="hub-card-icon">♟</div>
+      <div class="hub-card" onclick="showScreen('screen-roster')">
+        <div class="hub-card-icon" style="color:var(--purple)">♟</div>
         <div class="hub-card-label">Roster</div>
-        <div class="hub-card-sub" id="hub-roster-count">0 / 12 monsters</div>
+        <div class="hub-card-sub" id="hub-roster-count">0 / 20 monsters</div>
       </div>
-      <div class="hub-card" id="card-maps" onclick="showScreen('screen-mapselect')">
-        <div class="hub-card-icon">◎</div>
+      <div class="hub-card" onclick="showScreen('screen-mapselect')">
+        <div class="hub-card-icon" style="color:var(--amber)">◎</div>
         <div class="hub-card-label">Maps</div>
-        <div class="hub-card-sub">Choose your battlefield</div>
+        <div class="hub-card-sub">Choose battlefield</div>
       </div>
-      <div class="hub-card" id="card-forge" onclick="openForge()">
-        <div class="hub-card-icon">⬡</div>
+      <div class="hub-card" onclick="openForge()">
+        <div class="hub-card-icon" style="color:var(--cyan)">⬡</div>
         <div class="hub-card-label">Relic Forge</div>
         <div class="hub-card-sub" id="hub-relic-count">0 Relics</div>
       </div>
     </div>
-    <div class="hub-footer">
-      <div class="daily-info" id="daily-info"></div>
+    <div class="hub-code-box">
+      <div class="hub-section-label">GIFT CODE</div>
+      <div class="hub-code-row">
+        <input id="code-input" type="text" placeholder="Enter code…" autocomplete="off" spellcheck="false"/>
+        <button class="btn btn-secondary btn-code" onclick="redeemCode()">Redeem</button>
+      </div>
     </div>
+    <div class="daily-info" id="daily-info"></div>
   </div>
 </div>
 
-<!-- ============================================================
-     SCREEN: ROSTER
-     ============================================================ -->
+<!-- ROSTER -->
 <div id="screen-roster" class="screen">
   <div class="screen-header">
     <button class="btn-back" onclick="showScreen('screen-hub')">← Back</button>
     <h2>Monster Roster</h2>
-    <div class="screen-header-right"></div>
+    <div></div>
   </div>
   <div class="roster-filters">
-    <button class="filter-btn active" data-role="all" onclick="filterRoster('all',this)">All</button>
-    <button class="filter-btn" data-role="anchor" onclick="filterRoster('anchor',this)">Anchor</button>
-    <button class="filter-btn" data-role="ravager" onclick="filterRoster('ravager',this)">Ravager</button>
-    <button class="filter-btn" data-role="weaver" onclick="filterRoster('weaver',this)">Weaver</button>
-    <button class="filter-btn" data-role="artillerist" onclick="filterRoster('artillerist',this)">Artillery</button>
-    <button class="filter-btn" data-role="whisper" onclick="filterRoster('whisper',this)">Whisper</button>
-    <button class="filter-btn" data-role="conduit" onclick="filterRoster('conduit',this)">Conduit</button>
+    <button class="filter-btn active" onclick="filterRoster('all',this)">All</button>
+    <button class="filter-btn" onclick="filterRoster('anchor',this)">Anchor</button>
+    <button class="filter-btn" onclick="filterRoster('ravager',this)">Ravager</button>
+    <button class="filter-btn" onclick="filterRoster('weaver',this)">Weaver</button>
+    <button class="filter-btn" onclick="filterRoster('artillerist',this)">Artillery</button>
+    <button class="filter-btn" onclick="filterRoster('whisper',this)">Whisper</button>
+    <button class="filter-btn" onclick="filterRoster('conduit',this)">Conduit</button>
   </div>
   <div id="roster-grid" class="roster-grid"></div>
 </div>
 
-<!-- ============================================================
-     SCREEN: MAP SELECT
-     ============================================================ -->
+<!-- MAP SELECT -->
 <div id="screen-mapselect" class="screen">
   <div class="screen-header">
     <button class="btn-back" onclick="showScreen('screen-hub')">← Back</button>
     <h2>Choose Battlefield</h2>
-    <div class="screen-header-right"></div>
+    <div></div>
   </div>
   <div id="map-list" class="map-list"></div>
 </div>
 
-<!-- ============================================================
-     SCREEN: PRE-RUN (loadout)
-     ============================================================ -->
+<!-- PRE-RUN -->
 <div id="screen-prerun" class="screen">
   <div class="screen-header">
     <button class="btn-back" onclick="showScreen('screen-mapselect')">← Back</button>
-    <h2 id="prerun-title">The Crumbling Keep</h2>
-    <div class="screen-header-right"></div>
+    <h2 id="prerun-title">—</h2>
+    <div></div>
   </div>
   <div class="prerun-body">
     <div class="prerun-section">
-      <h3>Select Units <span class="prerun-hint">(choose up to 4)</span></h3>
+      <h3>Units <span class="prerun-hint">(up to 4)</span></h3>
       <div id="prerun-unit-grid" class="prerun-unit-grid"></div>
     </div>
     <div class="prerun-section">
-      <h3>Select Spells <span class="prerun-hint">(choose 2)</span></h3>
+      <h3>Spells <span class="prerun-hint">(pick 2)</span></h3>
       <div id="prerun-spell-grid" class="prerun-spell-grid"></div>
     </div>
     <div class="prerun-selected">
-      <div>
-        <div class="prerun-selected-label">YOUR TEAM</div>
-        <div id="prerun-selected-units" class="prerun-selected-row"></div>
-      </div>
-      <div>
-        <div class="prerun-selected-label">YOUR SPELLS</div>
-        <div id="prerun-selected-spells" class="prerun-selected-row"></div>
-      </div>
+      <div><div class="prerun-selected-label">YOUR TEAM</div><div id="prerun-selected-units" class="prerun-selected-row"></div></div>
+      <div><div class="prerun-selected-label">YOUR SPELLS</div><div id="prerun-selected-spells" class="prerun-selected-row"></div></div>
     </div>
     <button id="start-run-btn" class="btn btn-primary btn-large" onclick="startRun()">Deploy to Battlefield</button>
   </div>
 </div>
 
-<!-- ============================================================
-     SCREEN: GAME
-     ============================================================ -->
+<!-- GAME -->
 <div id="screen-game" class="screen">
   <div id="game-hud">
     <div id="hud-left">
-      <div class="hud-stat" id="hud-wave-display">Wave <b id="hud-wave">1</b></div>
+      <div class="hud-stat">Wave <b id="hud-wave">1</b></div>
       <div class="hud-hp-wrap">
         <span class="hud-stat-label">BASE</span>
         <div class="hud-hp-bar"><div id="hud-hp-fill"></div></div>
@@ -163,19 +149,13 @@
       </div>
     </div>
     <div id="hud-right">
-      <div class="hud-stat"><span class="cur-icon">◈</span><span id="run-gold">0</span></div>
+      <div class="hud-stat"><span class="cur-icon gold-icon">◈</span><span id="run-gold">0</span></div>
       <div class="hud-stat"><span class="cur-icon shard-icon">▲</span><span id="run-shards">0</span></div>
     </div>
   </div>
-
-  <div id="game-area">
-    <canvas id="game-canvas"></canvas>
-  </div>
-
+  <div id="game-area"><canvas id="game-canvas"></canvas></div>
   <div id="game-bottom">
-    <!-- Spell buttons -->
     <div id="spell-bar"></div>
-    <!-- Possess UI -->
     <div id="possess-bar" class="hidden">
       <div id="possess-info">
         <div id="possess-name"></div>
@@ -187,42 +167,29 @@
       </button>
       <button id="possess-release-btn" onclick="releasePossess()">Release</button>
     </div>
-    <!-- Team bar (unit slots) -->
     <div id="team-bar"></div>
   </div>
-
-  <!-- Placement prompt -->
   <div id="place-prompt" class="hidden">
-    <span>Tap a tile to place <b id="place-monster-name">—</b></span>
+    <span>Tap tile to place <b id="place-monster-name">—</b></span>
     <button onclick="cancelPlace()">Cancel</button>
   </div>
-
-  <!-- Wave result banner -->
-  <div id="wave-banner" class="wave-banner hidden">
-    <span id="wave-banner-text"></span>
-  </div>
+  <div id="wave-banner" class="wave-banner hidden"><span id="wave-banner-text"></span></div>
 </div>
 
-<!-- ============================================================
-     OVERLAY: SHOP
-     ============================================================ -->
+<!-- OVERLAY: SHOP -->
 <div id="overlay-shop" class="overlay hidden">
   <div class="shop-card">
     <div class="shop-header">
       <div class="shop-title">RIFT MARKET</div>
       <div class="shop-sub">Wave <span id="shop-wave">5</span> complete</div>
-      <div class="shop-shards">▲ <span id="shop-shards-val">0</span> Shards</div>
+      <div class="shop-shards">▲ <span id="shop-shards-val">0</span> Shards available</div>
     </div>
     <div id="shop-offers" class="shop-offers"></div>
-    <div class="shop-footer">
-      <button class="btn btn-primary" id="shop-continue-btn" onclick="closeShop()">Continue to Next Wave →</button>
-    </div>
+    <div class="shop-footer"><button class="btn btn-primary" onclick="closeShop()">Continue →</button></div>
   </div>
 </div>
 
-<!-- ============================================================
-     OVERLAY: PORTAL (summon)
-     ============================================================ -->
+<!-- OVERLAY: PORTAL -->
 <div id="overlay-portal" class="overlay hidden">
   <div class="portal-card">
     <div class="shop-header">
@@ -235,46 +202,58 @@
     </div>
     <div class="portal-btns">
       <button class="btn btn-secondary" onclick="doPull(1)">Single Pull <span class="cost">◉ 10</span></button>
-      <button class="btn btn-primary" onclick="doPull(10)">10-Pull <span class="cost">◉ 90</span></button>
+      <button class="btn btn-primary"   onclick="doPull(10)">10-Pull <span class="cost">◉ 90</span></button>
     </div>
-    <div class="portal-pity">Pull counter: <b id="portal-pity">0</b> | Next Rare guaranteed at 10</div>
-    <button class="btn-back portal-close" onclick="closePortal()">← Back</button>
+    <div class="portal-pity">Pity counter: <b id="portal-pity">0</b> · Rare guaranteed at 10</div>
+    <button class="portal-close" onclick="closePortal()">← Back</button>
   </div>
 </div>
 
-<!-- ============================================================
-     OVERLAY: RUN RESULT
-     ============================================================ -->
+<!-- OVERLAY: RUN RESULT -->
 <div id="overlay-result" class="overlay hidden">
   <div class="result-card">
-    <div id="result-header" class="result-header"></div>
-    <div class="result-rows" id="result-rows"></div>
-    <div class="result-reward" id="result-reward"></div>
+    <div id="result-header"></div>
+    <div id="result-rows" class="result-rows"></div>
+    <div id="result-reward" class="result-reward"></div>
     <div class="result-btns">
-      <button class="btn btn-secondary" onclick="goHub()">Return to Hub</button>
+      <button class="btn btn-secondary" onclick="goHub()">Hub</button>
       <button class="btn btn-primary" onclick="retryRun()">Run Again</button>
     </div>
   </div>
 </div>
 
-<!-- ============================================================
-     OVERLAY: MONSTER DETAIL
-     ============================================================ -->
+<!-- OVERLAY: MONSTER DETAIL -->
 <div id="overlay-monster" class="overlay hidden">
   <div class="monster-detail-card">
-    <canvas id="monster-detail-canvas" width="120" height="120"></canvas>
-    <div id="monster-detail-info"></div>
+    <div class="monster-detail-header">
+      <canvas id="monster-detail-canvas" width="110" height="110"></canvas>
+      <div class="monster-detail-name-block">
+        <div id="md-name" class="md-name"></div>
+        <div id="md-role" class="md-role"></div>
+        <div id="md-rarity" class="md-rarity"></div>
+        <div id="md-stars" class="md-stars"></div>
+        <div id="md-level" class="md-level"></div>
+      </div>
+    </div>
+    <div class="monster-tabs">
+      <button class="mtab active" onclick="switchMTab('stats',this)">Stats</button>
+      <button class="mtab" onclick="switchMTab('guide',this)">Guide</button>
+      <button class="mtab" onclick="switchMTab('lore',this)">Lore</button>
+    </div>
+    <div id="mtab-stats"  class="mtab-content"></div>
+    <div id="mtab-guide"  class="mtab-content hidden"></div>
+    <div id="mtab-lore"   class="mtab-content hidden"></div>
     <div class="monster-detail-btns">
-      <button class="btn btn-secondary" id="monster-upgrade-btn" onclick="upgradeMonster()">Upgrade (◈ <span id="upgrade-cost">0</span>)</button>
+      <button class="btn btn-secondary" id="monster-upgrade-btn" onclick="upgradeMonster()">Upgrade</button>
       <button class="btn btn-primary" onclick="closeMonsterDetail()">Close</button>
     </div>
   </div>
 </div>
 
-<!-- TOAST -->
 <div id="toast"></div>
 
 <script src="data.js"></script>
+<script src="sounds.js"></script>
 <script src="game.js"></script>
 </body>
 </html>
